@@ -52,23 +52,27 @@ object BigramAnalysis {
     startWordBGbGCountStartWordBgsCount.saveAsTextFile("hdfs:///tmp/bigramWordOccuranceCount.txt")
 
     //    bg - bg start word - reqlative freq
-    val bigramRelativeFrequencies = startWordBGbGCountStartWordBgsCount.map(a => (a._2, a._1, a._4.toFloat/a._3.toFloat))
 
     //What are the five most frequent words following the word "light"? What is the frequency of observing each word?
-    bigramRelativeFrequencies.filter(a => a._2.equals("light")).sortBy(a => - a._3).take(5)
-    //    Array[(String, String, Float)] = Array((light what,light,1.0), (light were,light,1.0), (light murder,light,1.0), (light joy,light,1.0), (light gentlemen,light,1.0))
+    startWordBGbGCountStartWordBgsCount.cache()
 
+    startWordBGbGCountStartWordBgsCount.filter(a => a._1.equals("light")).map(a => (a._1, a._2, a._4/a._3.toFloat)).sortBy(a => a._3).take(10)
+//    Array((light,light and,0.01754386), (light,light of,0.018867925), (light,light to,0.05263158), (light,light in,0.06666667), (light,light on,0.06666667), (light,light is,0.07692308), (light,light upon,0.083333336), (light,light that,0.1), (light,light a,0.11111111), (light,light the,0.11111111))
 
-    //    Same question, except for the word "contain".
-    bigramRelativeFrequencies.filter(a => a._2.equals("contain")).sortBy(a => - a._3).take(5)
-    //    Array[(String, String, Float)] = Array((contain him,contain,1.0), (contain let,contain,1.0), (contain celestial,contain,1.0), (contain thyself,contain,1.0), (contain their,contain,1.0))
+//  Same question, except for the word "contain".
+    startWordBGbGCountStartWordBgsCount.filter(a => a._1.equals("contain")).map(a => (a._1, a._2, a._4/a._3.toFloat)).sortBy(a => a._3).take(10)
 
-    //    If there are a total of N words in your vocabulary, then there are a total of N2 possible values for F(Wn|Wn-1)—in theory, every word can follow every other word (including itself). What fraction of these values are non-zero? In other words, what proportion of all possible events are actually observed? To give a concrete example, let's say that following the word "happy", you only observe 100 different words in the text collection. This means that N-100 words are never seen after "happy" (perhaps the distribution of happiness is quite limited?).
+//  Array((contain,contain the,0.33333334), (contain,contain a,0.33333334), (contain,contain thee,0.33333334), (contain,contain him,1.0), (contain,contain let,1.0), (contain,contain celestial,1.0), (contain,contain thyself,1.0), (contain,contain their,1.0), (contain,contain and,1.0), (contain,contain ourselves,1.0))
+
+//  If there are a total of N words in your vocabulary, then there are a total of N2 possible values for F(Wn|Wn-1)—in theory, every word can follow every other word (including itself). What fraction of these values are non-zero? In other words, what proportion of all possible events are actually observed? To give a concrete example, let's say that following the word "happy", you only observe 100 different words in the text collection. This means that N-100 words are never seen after "happy" (perhaps the distribution of happiness is quite limited?).
     val allWords = file.flatMap(line => line.split(" "))
-    val allWordsCount = allWords.count
-    val totalPossibleCombinations = allWordsCount * allWordsCount
+    val allDistinctWordsCount = allWords.distinct.count
+    val totalPossibleCombinations = allDistinctWordsCount * allDistinctWordsCount
 
-    val allBigramsForThisWord = startWordBGCount.map(a => (a._1, (totalPossibleCombinations - a._2)/totalPossibleCombinations.toFloat))
+    val allDistinctBigrams = bigramsRDD.distinct.count
+
+    val fractionOfBgsFoundOutOFTotalPossible = allDistinctBigrams / totalPossibleCombinations.toFloat
+//  2.430579E-4
 
   }
   def getBigrams(input: String): List[String] = input.split(" ").sliding(2).toList.map(ws => ws.mkString(" "))
