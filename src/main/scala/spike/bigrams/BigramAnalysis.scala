@@ -5,6 +5,8 @@ import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.SparkContext._
 import spike.bigrams.RDDImplicits.RichRDD
 
+import scala.reflect.ClassTag
+
 //the problem is from http://lintool.github.io/Cloud9/docs/exercises/bigrams.html
 //scope for improvement by introducing domain models, using caching, hence WIP
 
@@ -37,8 +39,8 @@ object Bigram {
 }
 
 object RDDImplicits {
-  implicit class RichRDD[T](rdd: RDD[T]) {
-     def countEachElement(): RDD[(T, Int)] = {
+  implicit class RichRDD[T: ClassTag](rdd: RDD[T]) {
+     def countEachElement = {
       rdd.map(bg => (bg, 1)).reduceByKey((c1, c2) => c1 + c2)
     }
     
@@ -46,7 +48,7 @@ object RDDImplicits {
       rdd.filter(f).count()
     }
 
-    def sortByDesc[K : Ordering[K]](f: T => K): RDD[T] = {
+    def sortByDesc[K : Ordering: ClassTag](f: T => K): RDD[T] = {
       val isAscending = false
       rdd.sortBy(f, isAscending)
     }
@@ -70,7 +72,7 @@ object BigramAnalysis {
 //  How many unique bigrams are there?
     bigramsRDD.distinct.count    //  432310
 
-    val bgOccrCount = bigramsRDD.countEachElement()
+    val bgOccrCount = bigramsRDD.countEachElement
     
     //    number of bigrams that appear only once:
     bgOccrCount.countWhere(a => a._2 == 1)//    296134
