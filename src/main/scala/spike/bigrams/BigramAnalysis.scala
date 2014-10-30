@@ -49,6 +49,7 @@ object BigramAnalysis {
     //   startWord - BG           - BG count    - bgs starting with word
     //    a._1     - a._2._1._1   - a._2._1._2  - a._2._2
     val startWordBGbGCountStartWordBgsCount = startWordBGAndBGCount.join(startWordBGCount).map(a => (a._1, a._2._1._1, a._2._1._2, a._2._2))
+    startWordBGbGCountStartWordBgsCount.saveAsTextFile("hdfs:///tmp/bigramWordOccuranceCount.txt")
 
     //    bg - bg start word - reqlative freq
     val bigramRelativeFrequencies = startWordBGbGCountStartWordBgsCount.map(a => (a._2, a._1, a._4.toFloat/a._3.toFloat))
