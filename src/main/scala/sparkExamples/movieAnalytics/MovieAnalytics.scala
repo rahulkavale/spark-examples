@@ -1,4 +1,4 @@
-package spike.movieAnalytics
+package sparkExamples.movieAnalytics
 
 trait MovieGenre
 case object Action extends MovieGenre

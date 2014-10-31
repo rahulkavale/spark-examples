@@ -1,60 +1,14 @@
-package spike.bigrams
+package sparkExamples.bigrams
 
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.SparkContext._
-import spike.bigrams.RDDImplicits.RichRDD
+import sparkExamples.bigrams.RDDImplicits.RichRDD
 
 import scala.reflect.ClassTag
 
 //the problem is from http://lintool.github.io/Cloud9/docs/exercises/bigrams.html
 //scope for improvement by introducing domain models, using caching, hence WIP
-
-case class Bigram(firstWord: String, secondWord: String) {
-//  def merge(bigram: Bigram): Bigram = Bigram(firstWord, secondWord + "$$$$$$$$$$" + secondWord)
-
-  def isValidBigram: Boolean = !firstWord.equals(" ") && !secondWord.equals(" ")
-}
-
-case class BigramsWithSameStart(firstWord: String, bigrams: List[String]) {
-  def bigramsCount = bigrams.size
-
-  def merge(bg2: BigramsWithSameStart): BigramsWithSameStart = {
-    new BigramsWithSameStart(firstWord, bigrams ++ bg2.bigrams)
-  }
-}
-
-object BigramsWithSameStart {
-  def apply(bigram: Bigram) = {
-    new BigramsWithSameStart(bigram.firstWord, List(bigram.secondWord))
-  }
-}
-
-object Bigram {
-  def apply(input: String): List[Bigram] = {
-    val splitWords = input.split(" ").sliding(2).toList
-    splitWords.map(words => new Bigram(words(0), words(1)))
-  }
-  
-}
-
-object RDDImplicits {
-  implicit class RichRDD[T: ClassTag](rdd: RDD[T]) {
-     def countEachElement = {
-      rdd.map(bg => (bg, 1)).reduceByKey((c1, c2) => c1 + c2)
-    }
-    
-    def countWhere(f: T => Boolean): Long = {
-      rdd.filter(f).count()
-    }
-
-    def sortByDesc[K : Ordering: ClassTag](f: T => K): RDD[T] = {
-      val isAscending = false
-      rdd.sortBy(f, isAscending)
-    }
-  }
-  
-}
 
 object BigramAnalysis {
   def main(arg: Array[String]) = {
@@ -134,3 +88,6 @@ object BigramAnalysis {
 
   }
 }
+
+
+

@@ -1,4 +1,4 @@
-package spike.movieAnalytics
+package sparkExamples.movieAnalytics
 
 trait Gender
 object Gender {

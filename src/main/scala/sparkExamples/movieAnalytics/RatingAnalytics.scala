@@ -1,4 +1,4 @@
-package spike.movieAnalytics
+package sparkExamples.movieAnalytics
 
 case class Rating(userId: Int, movieId: Int, rating: Int, timestamp: Long)
 object Rating{

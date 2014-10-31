@@ -1,7 +1,7 @@
-package spike
+package sparkExamples.githubDataAnalysis
 
-import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.sql._
+import org.apache.spark.{SparkConf, SparkContext}
 
 case class GitHubActor(blog: String, company: String, email: String, name: String, actorType: String)
 object GitHubActor{
