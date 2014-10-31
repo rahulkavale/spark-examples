@@ -1,7 +1,6 @@
 package sparkExamples.bigrams
 
 import org.apache.spark.SparkContext._
-import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 import sparkExamples.bigrams.models.{Bigram, BigramsWithSameStart}
 import sparkExamples.wrappers.RDDImplicits.RichRDD
