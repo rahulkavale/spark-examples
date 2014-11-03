@@ -9,7 +9,7 @@ name := "SparkPoc"
 
 version := "1.0"
 
-scalaVersion := "2.10.3"
+scalaVersion := "2.10.4"
 
 retrieveManaged in ThisBuild := true
 
@@ -21,6 +21,11 @@ libraryDependencies += "joda-time" % "joda-time" % "2.0"
 
 libraryDependencies += "org.joda" % "joda-convert" % "1.2"
 
+libraryDependencies += "org.specs2" %% "specs2" % "1.12.3" withSources() withJavadoc()
+
+libraryDependencies += "junit" % "junit" % "4.10" withSources() withJavadoc()
+
+libraryDependencies += "org.scalaz.stream" % "scalaz-stream_2.10" % "0.1"
 
 resolvers += "Akka Repository" at "http://repo.akka.io/releases/"
 
