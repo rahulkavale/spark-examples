@@ -17,6 +17,11 @@ libraryDependencies += "org.apache.spark" % "spark-sql_2.10" % "1.1.0"
 
 libraryDependencies += "org.apache.spark" % "spark-core_2.10" % "1.1.0"
 
+libraryDependencies += "joda-time" % "joda-time" % "2.0"
+
+libraryDependencies += "org.joda" % "joda-convert" % "1.2"
+
+
 resolvers += "Akka Repository" at "http://repo.akka.io/releases/"
 
 resolvers += "Spray Repository" at "http://repo.spray.cc/"
