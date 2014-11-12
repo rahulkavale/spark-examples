@@ -2,7 +2,7 @@ package sparkExamples.invertedIndices.execution
 
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.SparkContext._
-import sparkExamples.invertedIndices.models.models.{InvertedIndex, OccrCount, Line, Word}
+import sparkExamples.invertedIndices.models._
 import sparkExamples.wrappers.RDDImplicits.RichRDD
 
 //http://lintool.github.io/Cloud9/docs/exercises/indexing.html
@@ -38,13 +38,15 @@ object Indices {
     invertedIndices.filter(invertedIndex => invertedIndex.word.equals(Word("starcross'd"))).first()
 //    res4: Array[sparkExamples.invertedIndices.models.models.InvertedIndex] = Array(InvertedIndex(Word(starcross'd),OccrCount(1),List((57052,1))))
 
-    val goldOccr = invertedIndices.filter(invertedIndex => invertedIndex.word.equals(Word("gold"))).first()
-    goldOccr.histogram
+    histgramFor("gold")
 //    Map(2 -> 58, 1 -> 523, 3 -> 3)
 
-    val silverOccr = invertedIndices.filter(invertedIndex => invertedIndex.word.equals(Word("silver"))).first()
-    silverOccr.histogram
+    histgramFor("silver")
 //    (Word(silver),Map(2 -> 39, 1 -> 314, 3 -> 1))
+
+    def histgramFor(word: String): Unit = {
+      invertedIndices.filter(invertedIndex => invertedIndex.word.equals(Word(word))).first().histogram
+    }
 
   }
 }
