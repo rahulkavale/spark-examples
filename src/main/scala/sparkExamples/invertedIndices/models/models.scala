@@ -10,14 +10,21 @@ object models {
 
   case class Word(wordText: String)
 
-  case class OccrCount[T](count: Int)
+  case class OccrCount[T](count: Int){
+    override def toString = count.toString
+  }
 
-  case class InvertedIndex(word: Word, count: OccrCount[Word], occurances: List[(Long, Int)]) {
-    def histogram =
-      occurances
-      .map(a => (a._2, 1))
-      .groupBy(a => a._1)
-      .map(a => (a._1, a._2.size))
+  case class InvertedIndex(word: Word, count: OccrCount[Word], occurances: Set[(Long, Int)]) {
+    def histogram = {
+      val histogram = occurances
+        .map(a => (a._2, a._1))
+        .groupBy(a => a._1)
+        .map(a => (a._1, a._2.size))
+      (word, histogram)
+    }
+
+
+    override def toString = word.wordText + "\t" + count + "\t" + occurances.mkString(",")
   }
 
 }

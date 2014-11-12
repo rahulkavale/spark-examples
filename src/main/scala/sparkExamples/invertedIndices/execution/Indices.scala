@@ -25,7 +25,7 @@ object Indices {
 
 //    println(wordToLine.collect())
 
-    val wordLines = wordToLine.map(a => (Word(a._1), List(a._2))).reduceByKey(_ ++ _)
+    val wordLines = wordToLine.map(a => (Word(a._1), Set(a._2))).reduceByKey(_ ++ _)
 
     val wordCountLine = wordLines.map(a => (a._1, OccrCount[Word](a._2.size), a._2))
 
@@ -39,12 +39,12 @@ object Indices {
 //    res4: Array[sparkExamples.invertedIndices.models.models.InvertedIndex] = Array(InvertedIndex(Word(starcross'd),OccrCount(1),List((57052,1))))
 
     val goldOccr = invertedIndices.filter(invertedIndex => invertedIndex.word.equals(Word("gold"))).first()
-    goldOccr.occurances.groupBy(a => a._2).map(a => (a._1, a._2.size))
-//    Map(2 -> 116, 1 -> 523, 3 -> 9)
+    goldOccr.histogram
+//    Map(2 -> 58, 1 -> 523, 3 -> 3)
 
     val silverOccr = invertedIndices.filter(invertedIndex => invertedIndex.word.equals(Word("silver"))).first()
-    silverOccr.occurances.groupBy(a => a._2).map(a => (a._1, a._2.size))
-//    Map(2 -> 78, 1 -> 314, 3 -> 3)
+    silverOccr.histogram
+//    (Word(silver),Map(2 -> 39, 1 -> 314, 3 -> 1))
 
   }
 }
