@@ -1,6 +1,6 @@
 spark-examples
 ==============
-BigramAnalysis is stable at this point, all other class depand on the local files, need to fix the paths for the inputs.
+Anagrams, BigramAnalysis, Inverted indices, vihicle usage are stable at this point, all other classes are WIP. SOme of the examples depand on the local files, and I will be fixing these paths for the inputs.
 
 In order to run the examples from local machine,
 Make sure you have spark in your path available.
